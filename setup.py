@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyexecutor",
-    version="0.0.2",
+    version="0.0.3",
     author="WANG ZIJIAN",
     author_email="zijian0906@gmail.com",
     description=
