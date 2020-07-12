@@ -11,7 +11,6 @@ class Commander():
     _logger = None
 
     def __init__(self, logger=None):
-        super().__init__()
         self._set_logger(logger)
 
     """
@@ -69,12 +68,12 @@ class Commander():
     Convert binary string to string
     """
     def _string(self, bstring, charset='utf8'):
-        return bstring.decode(charset)
+        return str(bstring.decode(charset)).strip()
 
     """
     Get output in string
     """
-    def result(self):
+    def output(self):
         return self._output
 
     """
@@ -84,36 +83,36 @@ class Commander():
         try:
             return json.loads(self._output)
         except Exception as e:
-            raise CommanderException('invalid JSON string {}'.format(self._output))
+            raise CommanderException('invalid JSON string "{}"'.format(self._output))
 
     """
     If error occurred
     """
-    def error(self):
+    def has_error(self):
         return bool(self._error)
 
     """
     If warning occurred
     """
-    def warning(self):
+    def has_warning(self):
         return bool(self._warning)
 
     """
     If no error or no warning occurred
     """
-    def noerror(self):
-        return not (self.error() and self.warning())
+    def ok(self):
+        return not (self.has_error() and self.has_warning())
 
     """
     Get error messages
     """
-    def error_message(self):
+    def error(self):
         return self._error
 
     """
     Get warning messages
     """
-    def warning_message(self):
+    def warning(self):
         return self._warning
 
     """

@@ -1,5 +1,5 @@
 from exceptions import ExecutorException
-from executor import Commander
+from pyexecutor import Commander
 
 
 class Executor():
@@ -19,12 +19,12 @@ class Executor():
         for executor in [executable, '{}.exe'.format(executable), '{}.bat'.format(executable)]:
             self._commander.run(executor, True)
 
-            if self._commander.noerror():
+            if self._commander.ok():
                 self._executor = executor
                 break
 
         if self._executor is None:
-            raise ExecutorException('Executable {} command not found!'.format(executable))
+            raise ExecutorException('Executable file {} not found!'.format(executable))
 
     """
     Set command trailer
@@ -39,11 +39,11 @@ class Executor():
         executable_cmd = '{} {} {}'.format(self._executor, cmd, self._trailer)
         self._commander.run(executable_cmd)
 
-        if self._commander.error():
+        if self._commander.has_error():
             raise ExecutorException(
-                    'Executor failed to execute \n{}\n because of error \n{}\n'.format(
+                    '"{}" execution failed with error "{}"'.format(
                         executable_cmd,
-                        self._commander.error_message()
+                        self._commander.error()
                     )
                 )
 
@@ -56,4 +56,4 @@ class Executor():
         if json_output:
             return self._run(cmd).json()
 
-        return self._run(cmd).result()
+        return self._run(cmd).output()

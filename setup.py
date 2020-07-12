@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyexecutor",
-    version="0.0.3",
+    version="0.0.4",
     author="WANG ZIJIAN",
-    author_email="zijian0906@gmail.com",
+    author_email="actiniwang@gmail.com",
     description=
     """
         A light-weight command executor to run commands and return stdout and stderr.
