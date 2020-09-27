@@ -82,7 +82,7 @@ class Commander():
     def json(self):
         try:
             return json.loads(self._output)
-        except Exception as e:
+        except Exception:
             raise CommanderException('invalid JSON string "{}"'.format(self._output))
 
     """
