@@ -9,9 +9,9 @@
 
 ## Requirement
 
-Python >= 3
+Python >= 3.5
 
-> Compatible with Python 3.4 3.5 3.6 3.7 3.8
+> Compatible with Python 3.5 3.6 3.7 3.8
 
 ## Installation
 
@@ -26,14 +26,14 @@ Import and run with python
 ```python
 from pyexecutor import Executor
 
-helm = Executor('helm')
+python = Executor('python')
 
-version = helm.run('version --short')
+version = python.run('--version')
 
 print(version)
 
 """
-v3.1.2+gd878d4d
+Python 3.8.0
 """
 ```
 
@@ -71,26 +71,35 @@ commander = Commander()
 # Run 'kubectl version --short --client'
 result = commander.run('kubectl version --short --client')
 
-# Get command output in string.
+# Get command output message.
+# {
+#   "clientVersion": {
+#     "major": "1",
+#     "minor": "19",
+#     "gitVersion": "v1.19.7",
+#     "gitCommit": "1dd5338295409edcfff11505e7bb246f0d325d15",
+#     "gitTreeState": "clean",
+#     "buildDate": "2021-01-13T13:23:52Z",
+#     "goVersion": "go1.15.5",
+#     "compiler": "gc",
+#     "platform": "darwin/amd64"
+#   }
+# }
 result.output()
 
 # Get command output in JSON object (<type 'dict'>), exception will be raised if result string is not JSON serializable.
+# {'clientVersion': {'major': '1', 'minor': '19', 'gitVersion': 'v1.19.7', 'gitCommit': '1dd5338295409edcfff11505e7bb246f0d325d15', 'gitTreeState': 'clean', 'buildDate': '2021-01-13T13:23:52Z', 'goVersion': 'go1.15.5', 'compiler': 'gc', 'platform': 'darwin/amd64'}}
 result.json()
 
-# Get command error in string.
+# Get command error message.
+# ""
 result.error()
 
-# Get command warning in string.
-result.warning()
+# If command exit with zero.
+result.success() == True
 
-# Error produced in command execution.
-result.has_error()
-
-# Warning produced in command execution.
-result.has_warning()
-
-# No errors or warnings produced in command execution.
-result.ok()
+# If command exit with non zero.
+result.fail() == True
 ```
 
 ### Logging

@@ -5,9 +5,9 @@ from exceptions import CommanderException
 
 
 class Commander():
-    _output = None
-    _error = None
-    _returncode = None
+    _output = ''
+    _error = ''
+    _returncode = 0
     _logger = None
 
     def __init__(self, logger=None):
@@ -20,16 +20,17 @@ class Commander():
         self._log_info('Start running command {} with supress error {}'.format(cmd, supress_error))
 
         try:
-            result = subprocess.run(cmd.strip().split(' '), shell=True, capture_output=True)
+            result = subprocess.run(cmd.strip().split(' '), capture_output=True)
             self._output = result.stdout
             self._error = result.stderr
-            self._returncode = result.returncode
 
             if result.returncode != 0:
                 raise CommanderException(result.stderr)
 
             return self
         except Exception as e:
+            self._returncode = 1
+
             if supress_error:
                 return self
             raise e

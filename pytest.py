@@ -8,17 +8,17 @@ from pyexecutor import Executor
 ##################
 # Executor tests #
 ##################
-python = Executor('python')
+echo = Executor('echo')
 
 # Output
 
-result = python.run(' -c print("executor")')
+result = echo.run(' executor')
 
 assert(result == 'executor')
 
 # JSON output
 
-result = python.run(' -c print("{}")', json_output=True)
+result = echo.run(' {}', json_output=True)
 
 assert(result == dict())
 
@@ -30,7 +30,7 @@ commander = Commander()
 
 # Output
 
-result = commander.run('python -c print("commander")')
+result = commander.run('echo commander')
 
 assert(result.success() == True)
 assert(result.fail() == False)
@@ -39,13 +39,11 @@ assert(result.output() == 'commander')
 
 # JSON output
 
-result = commander.run('python -c print("{}")')
+result = commander.run('echo {}')
 
 assert(result.json() == dict())
 
-# Error
-
-result = commander.run('python -c print("failure!", file=sys.stderr); exit 1;', supress_error = True)
+# Failure
+result = commander.run('somethingdonotexist nothing', supress_error = True)
 
 assert(result.fail() == True)
-assert(result.error() == 'failure!')

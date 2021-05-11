@@ -16,11 +16,11 @@ class Executor():
     Find proper executor
     """
     def _set_executor(self, executable):
-        for executor in [executable, '{}.sh'.format(executable), '{}.exe'.format(executable), '{}.bat'.format(executable)]:
-            self._commander.run(executor, True)
+        for executor in ['which {}'.format(executable), 'where {}'.format(executable), 'where {}.exe'.format(executable)]:
+            result = self._commander.run(executor, True)
 
             if self._commander.success():
-                self._executor = executor
+                self._executor = result.output()
                 break
 
         if self._executor is None:
