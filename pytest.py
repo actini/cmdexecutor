@@ -8,17 +8,17 @@ from pyexecutor import Executor
 ##################
 # Executor tests #
 ##################
-echo = Executor('echo')
+python = Executor('python')
 
 # Output
 
-result = echo.run(' executor')
+result = python.run(' -c print("executor")')
 
 assert(result == 'executor')
 
 # JSON output
 
-result = echo.run(' {}', json_output=True)
+result = python.run(' {}', json_output=True)
 
 assert(result == dict())
 
