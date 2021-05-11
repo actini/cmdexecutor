@@ -8,7 +8,7 @@ from pyexecutor import Executor
 ##################
 # Executor tests #
 ##################
-python = Executor('python3')
+python = Executor('python')
 
 # Output
 
@@ -30,7 +30,7 @@ commander = Commander()
 
 # Output
 
-result = commander.run('python3 -c print("commander")')
+result = commander.run('python -c print("commander")')
 
 assert(result.success() == True)
 assert(result.fail() == False)
@@ -39,13 +39,13 @@ assert(result.output() == 'commander')
 
 # JSON output
 
-result = commander.run('python3 -c print("{}")')
+result = commander.run('python -c print("{}")')
 
 assert(result.json() == dict())
 
 # Error
 
-result = commander.run('python3 -c print("failure!", file=sys.stderr); exit 1;', supress_error = True)
+result = commander.run('python -c print("failure!", file=sys.stderr); exit 1;', supress_error = True)
 
 assert(result.fail() == True)
 assert(result.error() == 'failure!')
