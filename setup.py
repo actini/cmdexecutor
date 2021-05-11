@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyexecutor",
-    version="0.0.4",
+    version="0.0.5",
     author="WANG ZIJIAN",
     author_email="actiniwang@gmail.com",
     description=
@@ -17,8 +17,6 @@ setuptools.setup(
     url="https://github.com/actini/pyexecutor",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

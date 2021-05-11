@@ -16,10 +16,10 @@ class Executor():
     Find proper executor
     """
     def _set_executor(self, executable):
-        for executor in [executable, '{}.exe'.format(executable), '{}.bat'.format(executable)]:
+        for executor in [executable, '{}.sh'.format(executable), '{}.exe'.format(executable), '{}.bat'.format(executable)]:
             self._commander.run(executor, True)
 
-            if self._commander.ok():
+            if self._commander.success():
                 self._executor = executor
                 break
 
@@ -39,9 +39,9 @@ class Executor():
         executable_cmd = '{} {} {}'.format(self._executor, cmd, self._trailer)
         self._commander.run(executable_cmd)
 
-        if self._commander.has_error():
+        if self._commander.fail():
             raise ExecutorException(
-                    '"{}" execution failed with error "{}"'.format(
+                    'Run "{}" failed, "{}"'.format(
                         executable_cmd,
                         self._commander.error()
                     )

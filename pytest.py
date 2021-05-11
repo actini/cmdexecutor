@@ -8,17 +8,17 @@ from pyexecutor import Executor
 ##################
 # Executor tests #
 ##################
-echo = Executor('echo')
+python = Executor('python3')
 
 # Output
 
-result = echo.run('executor')
+result = python.run(' -c print("executor")')
 
 assert(result == 'executor')
 
 # JSON output
 
-result = echo.run('{}', json_output=True)
+result = python.run(' -c print("{}")', json_output=True)
 
 assert(result == dict())
 
@@ -30,31 +30,22 @@ commander = Commander()
 
 # Output
 
-result = commander.run('echo commander')
+result = commander.run('python3 -c print("commander")')
 
-assert(result.ok())
-assert(result.has_error() == False)
-assert(result.has_warning() == False)
-assert(result.error() == None)
-assert(result.warning() == None)
+assert(result.success() == True)
+assert(result.fail() == False)
+assert(result.error() == '')
 assert(result.output() == 'commander')
 
 # JSON output
 
-result = commander.run('echo {}')
+result = commander.run('python3 -c print("{}")')
 
 assert(result.json() == dict())
 
-# Warning
-
-result = commander.run('echo warning 1>&2')
-
-assert(result.has_warning())
-assert(result.warning() == 'warning')
-
 # Error
 
-result = commander.run('echo error 1>&2')
+result = commander.run('python3 -c print("failure!", file=sys.stderr); exit 1;', supress_error = True)
 
-assert(result.has_error())
-assert(result.error() == 'error')
+assert(result.fail() == True)
+assert(result.error() == 'failure!')

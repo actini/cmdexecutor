@@ -7,7 +7,7 @@ from exceptions import CommanderException
 class Commander():
     _output = None
     _error = None
-    _warning = None
+    _returncode = None
     _logger = None
 
     def __init__(self, logger=None):
@@ -20,100 +20,52 @@ class Commander():
         self._log_info('Start running command {} with supress error {}'.format(cmd, supress_error))
 
         try:
-            result = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = result.communicate()
-            self._process(stdout, stderr)
+            result = subprocess.run(cmd.strip().split(' '), shell=True, capture_output=True)
+            self._output = result.stdout
+            self._error = result.stderr
+            self._returncode = result.returncode
+
+            if result.returncode != 0:
+                raise CommanderException(result.stderr)
+
             return self
         except Exception as e:
-            self._error = str(e)
             if supress_error:
                 return self
             raise e
 
     """
-    Process the output of command execution
-    """
-    def _process(self, stdout, stderr):
-        self._output = self._command_output(stdout)
-        self._error = self._command_error(stderr)
-        self._warning = self._command_warning(stderr)
-
-        self._log_info('Finish running command with OUTPUT\n {}\n WARNING\n {}\n ERROR\n {}\n'.format(self._output, self._warning, self._error))
-
-    """
-    Get command output in string
-    """
-    def _command_output(self, stdout):
-        return self._string(stdout)
-
-    """
-    Get command error in string
-    """
-    def _command_error(self, stderr):
-        if stderr.lower().find(b'error') == -1:
-            return None
-
-        return self._string(stderr)
-
-    """
-    Get command warning in string
-    """
-    def _command_warning(self, stderr):
-        if stderr.lower().find(b'warning') == -1:
-            return None
-
-        return self._string(stderr)
-
-    """
-    Convert binary string to string
-    """
-    def _string(self, bstring, charset='utf8'):
-        return str(bstring.decode(charset)).strip()
-
-    """
-    Get output in string
+    Get output message
     """
     def output(self):
-        return self._output
+        return self._output.decode("utf8").strip()
 
     """
-    Get output in JSON format
+    Get output message in JSON format
     """
     def json(self):
         try:
-            return json.loads(self._output)
-        except Exception:
+            return json.loads(self.output())
+        except Exception as e:
             raise CommanderException('invalid JSON string "{}"'.format(self._output))
 
     """
-    If error occurred
-    """
-    def has_error(self):
-        return bool(self._error)
-
-    """
-    If warning occurred
-    """
-    def has_warning(self):
-        return bool(self._warning)
-
-    """
-    If no error or no warning occurred
-    """
-    def ok(self):
-        return not (self.has_error() and self.has_warning())
-
-    """
-    Get error messages
+    Get error message
     """
     def error(self):
-        return self._error
+        return self._error.decode("utf8").strip()
 
     """
-    Get warning messages
+    Return code is 0
     """
-    def warning(self):
-        return self._warning
+    def success(self):
+        return self._returncode == 0
+
+    """
+    Return code is not 0
+    """
+    def fail(self):
+        return self._returncode != 0
 
     """
     Print log info messages
