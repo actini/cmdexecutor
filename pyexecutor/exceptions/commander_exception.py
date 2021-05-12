@@ -6,4 +6,4 @@ class CommanderException(Exception):
         self._message = message
 
     def __str__(self):
-        return "Commander exception {}".format(self._message)
+        return "COMMANDER EXCEPTION: {}".format(self._message)

@@ -96,7 +96,7 @@ result.json()
 result.error()
 
 # If command exit with zero.
-result.success() == True
+result.ok() == True
 
 # If command exit with non zero.
 result.fail() == True

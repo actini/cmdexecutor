@@ -6,4 +6,4 @@ class ExecutorException(Exception):
         self._message = message
 
     def __str__(self):
-        return "Executor exception {}".format(self._message)
+        return "EXECUTOR EXCEPTION: {}".format(self._message)
