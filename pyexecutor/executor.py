@@ -50,7 +50,7 @@ class Executor():
 
             return self._commander
         except Exception as e:
-            raise ExecutorExcepton(str(e))
+            raise ExecutorException(str(e))
 
     """
     Run commands with pretty outputs
