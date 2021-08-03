@@ -1,5 +1,5 @@
 class Logger():
-    _logger = None;
+    _logger = None
 
     def __init__(self, logger = None):
         self._logger = logger

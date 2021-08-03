@@ -1,4 +1,5 @@
-from pyexecutor.exceptions import ExecutorException
+import platform
+
 from pyexecutor import Commander
 from pyexecutor import Logger
 
@@ -16,22 +17,49 @@ class Executor():
         self._set_executor(executable)
 
     """
-    Find proper executor
+    Choose available executor
     """
-    def _set_executor(self, executable):
-        for executor in ['which {}'.format(executable), 'where {}'.format(executable), 'where {}.exe'.format(executable)]:
-            self._logger.debug('Trying executable file with {}'.format(executor))
+    def _set_executor(self, executor):
+        system = platform.system()
 
-            result = self._commander.run(executor, True)
-
-            if self._commander.ok():
-                self._executor = result.output()
-                self._logger.info('Executable file found {}'.format(self._executor))
-                break
+        if system == 'Linux' or system == 'Darwin':
+            self._search_linux(executor)
+        elif system == 'Windows':
+            self._search_windows(executor)
+        else:
+            raise ExecutorException('Unsupported OS type %s!' % (system))
 
         if self._executor is None:
-            self._logger.error('Executable file not found {}'.format(executable))
-            raise ExecutorException('Executable file {} not found!'.format(executable))
+            raise ExecutorException('Executor %s not found' % (executor))
+
+        self._logger.info('Choose "%s" as executor' % (self._executor))
+
+    """
+    Search available executors in Linux system
+    """
+    def _search_linux(self, executor):
+        result = self._commander.run("which", executor, True)
+
+        executors = result.output().replace("\n", "&PYEXECUTOR&").replace("\r", "&PYEXECUTOR&").split("&PYEXECUTOR&")
+
+        self._logger.debug("Available executors found: %s" % executors)
+
+        if len(executors) > 0:
+            self._executor = executors[0]
+
+    """
+    Search available executors in Windows system
+    """
+    def _search_windows(self, executor):
+        result = self._commander.run("where", executor, True)
+
+        executors = result.output().replace("\n", "&PYEXECUTOR&").replace("\r", "&PYEXECUTOR&").split("&PYEXECUTOR&")
+
+        self._logger.debug("Available executors found: %s" % executors)
+
+        for item in executors:
+            if item.endswith(".exe") or item.endswith(".bat"):
+                self._executor = item
 
     """
     Set command trailer
@@ -42,11 +70,11 @@ class Executor():
     """
     Run commands with commander
     """
-    def _run(self, cmd):
-        executable_cmd = '{} {} {}'.format(self._executor, cmd, self._trailer)
-        self._logger.debug('Full command "{}"'.format(executable_cmd))
+    def _run(self, args):
+        args = '%s %s' % (args, self._trailer)
+
         try:
-            self._commander.run(executable_cmd)
+            self._commander.run(self._executor, args)
 
             return self._commander
         except Exception as e:
@@ -55,16 +83,18 @@ class Executor():
     """
     Run commands with pretty outputs
     """
-    def run(self, cmd, json_output=False):
+    def run(self, args, json_output=False):
         if json_output:
-            self._logger.debug('Execute with JSON output {}'.format(self._executor))
-            return self._run(cmd).json()
+            self._logger.debug('Execute with JSON output %s' % (self._executor))
+            return self._run(args).json()
 
-        self._logger.debug('Execute {}'.format(self._executor))
-        return self._run(cmd).output()
+        self._logger.debug('Execute %s' % (self._executor))
+        return self._run(args).output()
 
     """
     Set the execution logger
     """
     def _set_logger(self, logger):
         self._logger = Logger(logger)
+
+class ExecutorException(Exception): ...

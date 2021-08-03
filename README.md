@@ -69,7 +69,7 @@ from pyexecutor import Commander
 commander = Commander()
 
 # Run 'kubectl version --short --client'
-result = commander.run('kubectl version --short --client')
+result = commander.run('kubectl', 'version --short --client')
 
 # Get command output message.
 # {
@@ -119,5 +119,5 @@ Logging in commander
 import logging
 from pyexecutor import Commander
 
-kubectl = Commander('kubectl', logger=logging.getLogger())
+Commander(logger=logging.getLogger())
 ```

@@ -5,10 +5,7 @@ from unittest.mock import patch
 
 sys.path.append('./pyexecutor')
 
-from pyexecutor import Executor
-from pyexecutor import Commander
-from pyexecutor.exceptions import ExecutorException
-from pyexecutor.exceptions import CommanderException
+from pyexecutor import Executor, Commander, ExecutorException, CommanderException
 
 
 class TestCommander(unittest.TestCase):
@@ -21,7 +18,7 @@ class TestCommander(unittest.TestCase):
         mock_subprocess_run.return_value = mock_subprocess_completedprocess
 
         commander = Commander()
-        commander.run('something')
+        commander.run(executor='something')
 
         mock_subprocess_run.assert_called_once()
         assert(commander.output() == 'success')
@@ -39,7 +36,7 @@ class TestCommander(unittest.TestCase):
 
         with self.assertRaises(CommanderException):
             commander = Commander()
-            commander.run('something')
+            commander.run(executor='something')
 
             mock_subprocess_run.assert_called_once()
             assert(commander.output() == '')
@@ -56,7 +53,7 @@ class TestCommander(unittest.TestCase):
         mock_subprocess_run.return_value = mock_subprocess_completedprocess
 
         commander = Commander()
-        commander.run('something')
+        commander.run(executor='something')
 
         assert(commander.json().get('test') is True)
 

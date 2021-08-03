@@ -12,13 +12,13 @@ python = Executor('python')
 
 # Output
 
-result = python.run(' -c print("executor")')
+result = python.run('-c print("executor")')
 
 assert(result == 'executor')
 
 # JSON output
 
-result = python.run(' {}', json_output=True)
+result = python.run('-c print("{}")', json_output=True)
 
 assert(result == dict())
 
@@ -30,20 +30,24 @@ commander = Commander()
 
 # Output
 
-result = commander.run('echo commander')
+result = commander.run(executor='echo', args='commander')
 
-assert(result.success() == True)
+assert(result.ok() == True)
 assert(result.fail() == False)
 assert(result.error() == '')
 assert(result.output() == 'commander')
 
 # JSON output
 
-result = commander.run('echo {}')
+result = commander.run(executor='echo', args='{}')
 
 assert(result.json() == dict())
 
+result = commander.run(executor='echo', args='[]')
+
+assert(result.json() == list())
+
 # Failure
-result = commander.run('somethingdonotexist nothing', supress_error = True)
+result = commander.run(executor='somethingdonotexist', args='nothing', supress_error = True)
 
 assert(result.fail() == True)
