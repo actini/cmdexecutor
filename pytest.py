@@ -2,8 +2,7 @@ import sys
 
 sys.path.append('./pyexecutor')
 
-from pyexecutor import Commander
-from pyexecutor import Executor
+from pyexecutor import Executor, Commander
 
 ##################
 # Executor tests #
