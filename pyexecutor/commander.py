@@ -18,11 +18,11 @@ class Commander():
     """
     def run(self, executor, args='', supress_error=False):
         if supress_error:
-            self._logger.warning('Supress error is True, will not throw any exceptions even if any error occured when running command!')
+            self._logger.warning('No exceptinos will be raised since supress_error is set to true!')
 
         try:
             command = [executor] + args.strip().split(' ')
-            self._logger.debug('Running command %s.' % (' '.join(command)))
+            self._logger.debug('[COMMAND] %s.' % (' '.join(command)))
 
             result = subprocess.run(command, capture_output=True)
             self._output = result.stdout
@@ -33,7 +33,6 @@ class Commander():
 
             self._returncode = 0
 
-            self._logger.info('Run command sucessfully!')
             return self
         except Exception as e:
             self._logger.error('%s' % (e))
@@ -43,7 +42,7 @@ class Commander():
             if not supress_error:
                 raise e
 
-            self._logger.warning('The command error is supressed due to supress_error is True!')
+            self._logger.warning('Supressed error %s' % str(e))
 
             return self
 
@@ -60,7 +59,6 @@ class Commander():
         try:
             return json.loads(self.output())
         except Exception as e:
-            self._logger.error('Cannot convert command output to JSON object, %s' % (e))
             raise CommanderException('Invalid JSON string "%s"' % (self._output))
 
     """

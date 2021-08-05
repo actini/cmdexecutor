@@ -1,11 +1,11 @@
-# PyExecutor - A light-weight command executor to run commands and return stdout and stderr.
+# PyExecutor - A light-weight module to run shell / commander commands and get output with Python.
 
 [![PyPI version](https://badge.fury.io/py/pyexecutor.svg)](https://badge.fury.io/py/pyexecutor)
 [![PyPI license](https://img.shields.io/pypi/l/pyexecutor.svg)](https://pypi.python.org/pypi/pyexecutor/)
 [![Downloads](https://pepy.tech/badge/pyexecutor)](https://pepy.tech/project/pyexecutor)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/pyexecutor)](https://badge.fury.io/py/pyexecutor)
 
-> Work with both Linux and Windows, compatible with executable files like `executor`, `executor.exe` and `executor.bat`.
+> Work with both Linux, Windows and MacOS, compatible with executable files like `executor`, `executor.exe` and `executor.bat`.
 
 ## Requirement
 

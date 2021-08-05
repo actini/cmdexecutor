@@ -2,8 +2,14 @@ language: python
 python:
   - "3.6"
 
-install:
+pre_install:
+  - pip install setuptools twine
   - pip install -r requirements.txt
 
-script:
+install:
   - python unittests.py
+  - python pytest.py
+
+script:
+  - python setup.py sdist
+  - twine upload dist/* -u $PYPI_USERNAME -p $PYPI_PASSWORD --skip-existing

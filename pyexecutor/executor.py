@@ -85,10 +85,8 @@ class Executor():
     """
     def run(self, args, json_output=False):
         if json_output:
-            self._logger.debug('Execute with JSON output %s' % (self._executor))
             return self._run(args).json()
 
-        self._logger.debug('Execute %s' % (self._executor))
         return self._run(args).output()
 
     """
