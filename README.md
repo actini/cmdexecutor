@@ -9,9 +9,9 @@
 
 ## Requirement
 
-Python >= 3.5
+Python >= 3.7
 
-> Compatible with Python 3.5 3.6 3.7 3.8
+> Compatible with Python 3.7+
 
 ## Installation
 
